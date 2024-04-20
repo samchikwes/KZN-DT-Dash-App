@@ -6,6 +6,5 @@ seaborn
 folium
 branca
 plotly
-io
 PIL
 gunicorn
