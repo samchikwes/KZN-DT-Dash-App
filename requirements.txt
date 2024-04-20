@@ -5,7 +5,6 @@ matplotlib
 seaborn
 folium
 branca
-collections
 webbrowser
 os
 plotly
