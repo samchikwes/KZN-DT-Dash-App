@@ -27,9 +27,9 @@ pd.set_option('display.width', desired_width)
 np.set_printoptions(linewidth=desired_width)
 pd.set_option('display.max_columns',8)
 
-df = pd.read_excel(r'C:\Temp\ZA DT Dashboard\KZN C2 Custom Data CDR.xlsx')
+df = pd.read_excel(r'KZN C2 Custom Data CDR.xlsx')
 
-sites_df = pd.read_csv(r'C:\Users\chikwesa\OneDrive - Vodafone Group\PC Backup 9 February 2021\Group Network Quality\Analytics\Programs\Python\KZN Sites 22_11_2021.csv')
+sites_df = pd.read_csv(r'KZN Sites 22_11_2021.csv')
 
 #EDA
 
