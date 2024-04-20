@@ -1,0 +1,15 @@
+dash==2.11.0 
+pandas
+numpy
+matplotlib
+seaborn
+folium
+branca
+collections
+webbrowser
+os
+plotly
+base64
+io
+PIL
+gunicorn
