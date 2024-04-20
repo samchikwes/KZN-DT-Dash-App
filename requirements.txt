@@ -6,4 +6,5 @@ seaborn
 folium
 branca
 plotly
+openpyxl
 gunicorn
