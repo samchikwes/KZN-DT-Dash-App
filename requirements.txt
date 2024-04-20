@@ -6,7 +6,6 @@ seaborn
 folium
 branca
 plotly
-base64
 io
 PIL
 gunicorn
