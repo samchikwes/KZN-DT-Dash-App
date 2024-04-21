@@ -111,6 +111,22 @@ app.layout = html.Div(children=[html.H1('KZN C2 DL Throughput DT Dashboard',
 
                                 #Add a scatter chart to show the correlation between throughput and SINR
                                 html.Div(dcc.Graph(id='throughput-sinr-scatter-chart')),
+                                html.Br(),
+
+				#Add a bar chart for mean throughput per area
+                                html.Div(dcc.Graph(id='mean-throughput-bar-chart')),
+                                html.Br(),
+
+                                #Add a bar chart for max throughput per area
+                                html.Div(dcc.Graph(id='max-throughput-bar-chart')),
+                                html.Br(),
+
+                                #Add a bar chart for min throughput per area
+                                html.Div(dcc.Graph(id='min-throughput-bar-chart')),
+                                html.Br(),
+
+                                #Add a violin plot for throughput per area
+                                html.Div(dcc.Graph(id='throughput-violin-plot')),
                                 html.Br()
                                 ])
 
