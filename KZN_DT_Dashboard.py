@@ -53,6 +53,38 @@ df['Marker_Color'] = df['ServiceStatus'].apply(get_marker_color)
 max_throughput = df['MeanUserDataRateKbps'].max()
 min_throughput = df['MeanUserDataRateKbps'].min()
 
+#Durban map coordinates info (for center point of plotted maps)
+
+durban_latitude = -29.883333
+durban_longitude = 31.049999
+
+#Plot all DL failure test points
+
+durban_map2 = folium.Map(location = [durban_latitude, durban_longitude], zoom_start=7, control_scale=True)
+
+dl_fail_test_points = folium.map.FeatureGroup()
+
+for lat, long, label in zip(dl_data_fail_df.Latitude, dl_data_fail_df.Longitude, dl_data_fail_df.LogName):
+    dl_fail_test_points.add_child(
+        folium.features.CircleMarker(
+            [lat, long],
+            radius=3,
+            color='red',
+            fill=True,
+            fill_color='red',
+            fill_opacity=0.6,
+            popup=label
+        )
+    )
+
+durban_map2.add_child(dl_fail_test_points)
+
+map_title5 = "KZN DL Testing Failures"
+title_html5 = f'<h1 style="position:absolute;z-index:100000;left:30vw" >{map_title5}</h1>'
+durban_map2.get_root().html.add_child(folium.Element(title_html5))
+
+durban_map2.save("map2.html")
+
 # Create a dash application
 app = dash.Dash(__name__)
 server = app.server
