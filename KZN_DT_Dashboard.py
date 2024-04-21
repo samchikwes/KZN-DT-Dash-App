@@ -48,6 +48,11 @@ df['Class'] = df['ServiceStatus'].apply(get_class)
 
 df['Marker_Color'] = df['ServiceStatus'].apply(get_marker_color)
 
+#Getting min & max throughput
+
+max_throughput = df['MeanUserDataRateKbps'].max()
+min_throughput = df['MeanUserDataRateKbps'].min()
+
 # Create a dash application
 app = dash.Dash(__name__)
 server = app.server
