@@ -19,9 +19,9 @@ import base64
 from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 
-df = pd.read_excel(r'C:\Temp\ZA DT Dashboard\KZN C2 Custom Data CDR.xlsx')
+df = pd.read_excel(r'KZN C2 Custom Data CDR.xlsx')
 
-sites_df = pd.read_csv(r'C:\Users\chikwesa\OneDrive - Vodafone Group\PC Backup 9 February 2021\Group Network Quality\Analytics\Programs\Python\KZN Sites 22_11_2021.csv')
+sites_df = pd.read_csv(r'KZN Sites 22_11_2021.csv')
 
 #Function to classify failures and non-failures as class 0 or 1
 
