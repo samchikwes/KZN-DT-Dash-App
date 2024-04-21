@@ -473,6 +473,7 @@ durban_map13.save("map13.html")
 
 # Create a dash application
 app = dash.Dash(__name__)
+server = app.server
 
 # Create an app layout
 app.layout = html.Div(children=[html.H1('KZN C2 DL Throughput DT Dashboard',
