@@ -48,12 +48,6 @@ df['Class'] = df['ServiceStatus'].apply(get_class)
 
 df['Marker_Color'] = df['ServiceStatus'].apply(get_marker_color)
 
-#Generate dataframes with DL failure and non-failure test samples
-
-dl_data_fail_df = df[df['ServiceStatus']=='Failed']
-
-dl_data_success_df = df[df['ServiceStatus']!='Failed']
-
 #Getting min & max throughput
 
 max_throughput = df['MeanUserDataRateKbps'].max()
@@ -90,28 +84,6 @@ title_html5 = f'<h1 style="position:absolute;z-index:100000;left:30vw" >{map_tit
 durban_map2.get_root().html.add_child(folium.Element(title_html5))
 
 durban_map2.save("map2.html")
-
-#Plot map markers indicating DL test status (failed or non-failed)
-
-durban_map3 = folium.Map(location = [durban_latitude, durban_longitude], zoom_start=7, control_scale=True)
-
-marker_cluster = MarkerCluster()
-
-durban_map3.add_child(marker_cluster)
-
-for index, record in df.iterrows():
-    marker = folium.Marker(
-        [record['Latitude'], record['Longitude']], popup = record['LogName'],
-        icon = folium.Icon(
-            color = 'white', icon_color = record['Marker_Color'])
-    )
-    marker_cluster.add_child(marker)
-
-map_title4 = "KZN DL Testing Status"
-title_html4 = f'<h1 style="position:absolute;z-index:100000;left:30vw" >{map_title4}</h1>'
-durban_map3.get_root().html.add_child(folium.Element(title_html4))
-
-durban_map3.save("map3.html")
 
 # Create a dash application
 app = dash.Dash(__name__)
@@ -290,13 +262,7 @@ def get_box_plot(throughput_slider):
 
 #Add saved Folium map plot of KZN DL Failure Test Points
 html.P("Map 1 -> Zoom in and click points to view their logfile name details", style={"fontSize": 20}),
-html.Iframe(srcDoc = open('map2.html', 'r').read(), style={'width': '1050px', 'height': '510px'}),
-html.Br(),
-
-# Add saved Folium map plot of KZN DL Testing Status Markers
-html.P("Map 2 -> Click marker clusters to focus on specific areas - green markers are successful samples and red markers are failure samples", style={"fontSize": 20}),
-html.Iframe(srcDoc=open('map3.html', 'r').read(),
-                style={'width': '1050px', 'height': '510px'})
+html.Iframe(srcDoc = open('map2.html', 'r').read(), style={'width': '1050px', 'height': '510px'})
 
 # Run the app
 if __name__ == '__main__':
