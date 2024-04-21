@@ -261,15 +261,14 @@ def get_box_plot(throughput_slider):
     return fig11
 
 #Add saved Folium map plot of KZN DL Failure Test Points
-                                html.P("Map 1 -> Zoom in and click points to view their logfile name details", style={"fontSize": 20}),
-                                html.Iframe(srcDoc = open('map2.html', 'r').read(), style={'width': '1050px', 'height': '510px'}),
-                                html.Br(),
+html.P("Map 1 -> Zoom in and click points to view their logfile name details", style={"fontSize": 20}),
+html.Iframe(srcDoc = open('map2.html', 'r').read(), style={'width': '1050px', 'height': '510px'}),
+html.Br(),
 
-                                # Add saved Folium map plot of KZN DL Testing Status Markers
-                                html.P("Map 2 -> Click marker clusters to focus on specific areas - green markers are successful samples and red markers are failure samples", style={"fontSize": 20}),
-                                html.Iframe(srcDoc=open('map3.html', 'r').read(),
-                                            style={'width': '1050px', 'height': '510px'}),
-                                html.Br(),
+# Add saved Folium map plot of KZN DL Testing Status Markers
+html.P("Map 2 -> Click marker clusters to focus on specific areas - green markers are successful samples and red markers are failure samples", style={"fontSize": 20}),
+html.Iframe(srcDoc=open('map3.html', 'r').read(),
+                style={'width': '1050px', 'height': '510px'})
 
 # Run the app
 if __name__ == '__main__':
