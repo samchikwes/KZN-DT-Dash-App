@@ -48,6 +48,12 @@ df['Class'] = df['ServiceStatus'].apply(get_class)
 
 df['Marker_Color'] = df['ServiceStatus'].apply(get_marker_color)
 
+#Generate dataframes with DL failure and non-failure test samples
+
+dl_data_fail_df = df[df['ServiceStatus']=='Failed']
+
+dl_data_success_df = df[df['ServiceStatus']!='Failed']
+
 #Getting min & max throughput
 
 max_throughput = df['MeanUserDataRateKbps'].max()
