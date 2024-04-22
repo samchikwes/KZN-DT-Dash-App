@@ -330,6 +330,10 @@ app.layout = html.Div(children=[html.H1('KZN C2 DL Throughput DT Dashboard',
                                     value=[min_throughput, max_throughput]
                                 ),
 
+                                # TASK 4: Add a scatter chart to show the correlation between payload and launch success
+                                html.Div(dcc.Graph(id='success-throughput-scatter-chart')),
+                                html.Br(),
+				
                                 #Add a scatter chart to show the correlation between throughput and SINR
                                 html.Div(dcc.Graph(id='throughput-sinr-scatter-chart')),
                                 html.Br(),
