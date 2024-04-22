@@ -195,9 +195,9 @@ app.layout = html.Div(children=[html.H1('KZN C2 DL Throughput DT Dashboard',
 				html.Iframe(srcDoc = open('map2.html', 'r').read(), style={'width': '1050px', 'height': '510px'}),
 				html.Br(),
 
-                                # Add saved Folium map plot of KZN DL Radio Access Technologies
-                                html.P("Map 4 -> Points indicate serving technology of the sample - zoom in and use legend to determine the tech", style={"fontSize": 20}),
-                                html.Iframe(srcDoc=open('map6.html', 'r').read(),
+                                # Add saved Folium map plot of KZN DL Throughput Heatmap
+                                html.P("Map 3 -> Zoom in for better granularity view of areas, with darker shading indicating higher throughput areas", style={"fontSize": 20}),
+                                html.Iframe(srcDoc=open('map5.html', 'r').read(),
                                             style={'width': '1050px', 'height': '510px'})
                                 ])
 
