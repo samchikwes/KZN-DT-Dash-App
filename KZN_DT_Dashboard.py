@@ -91,6 +91,28 @@ durban_map2.get_root().html.add_child(folium.Element(title_html5))
 
 durban_map2.save("map2.html")
 
+#Plot map markers indicating DL test status (failed or non-failed)
+
+durban_map3 = folium.Map(location = [durban_latitude, durban_longitude], zoom_start=7, control_scale=True)
+
+marker_cluster = MarkerCluster()
+
+durban_map3.add_child(marker_cluster)
+
+for index, record in df.iterrows():
+    marker = folium.Marker(
+        [record['Latitude'], record['Longitude']], popup = record['LogName'],
+        icon = folium.Icon(
+            color = 'white', icon_color = record['Marker_Color'])
+    )
+    marker_cluster.add_child(marker)
+
+map_title4 = "KZN DL Testing Status"
+title_html4 = f'<h1 style="position:absolute;z-index:100000;left:30vw" >{map_title4}</h1>'
+durban_map3.get_root().html.add_child(folium.Element(title_html4))
+
+durban_map3.save("map3.html")
+
 # Create a dash application
 app = dash.Dash(__name__)
 server = app.server
