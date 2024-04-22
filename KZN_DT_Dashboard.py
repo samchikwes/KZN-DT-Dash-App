@@ -278,6 +278,23 @@ durban_map12.get_root().html.add_child(folium.Element(max_title_html))
 
 durban_map12.save("map12.html")
 
+#Plot all KZN sites with custom icons on a map, centred on Min DL Throughput point
+
+durban_map13 = folium.Map(location = [identified_min_throughput_lat, identified_min_throughput_lon], zoom_start=14, control_scale=True)
+
+kzn_sites7 = folium.map.FeatureGroup()
+
+for lat, long, label in zip(sites_df.Latitude, sites_df.Longitude, sites_df.ENODEB_NAME):
+    kzn_sites7.add_child(
+        folium.Marker(
+            [lat, long],
+            popup=label,
+            icon=folium.features.CustomIcon(icon_image=icon_path ,icon_size=(50,50))
+        )
+    )
+
+durban_map13.add_child(kzn_sites4)
+
 #Plot Min DL Throughput point on map
 
 min_point_coordinate = [identified_min_throughput_lat, identified_min_throughput_lon]
