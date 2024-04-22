@@ -278,6 +278,87 @@ durban_map12.get_root().html.add_child(folium.Element(max_title_html))
 
 durban_map12.save("map12.html")
 
+#Plot all KZN sites with custom icons on a map, centred on Min DL Throughput point
+
+durban_map13 = folium.Map(location = [identified_min_throughput_lat, identified_min_throughput_lon], zoom_start=14, control_scale=True)
+
+kzn_sites7 = folium.map.FeatureGroup()
+
+for lat, long, label in zip(sites_df.Latitude, sites_df.Longitude, sites_df.ENODEB_NAME):
+    kzn_sites7.add_child(
+        folium.Marker(
+            [lat, long],
+            popup=label,
+            icon=folium.features.CustomIcon(icon_image=icon_path ,icon_size=(50,50))
+        )
+    )
+
+durban_map13.add_child(kzn_sites4)
+
+#Plot Min DL Throughput point on map
+
+min_point_coordinate = [identified_min_throughput_lat, identified_min_throughput_lon]
+
+min_id_circle = folium.Circle(min_point_coordinate, radius=50, color='#d35400', fill=True).add_child(folium.Popup('Min DL Throughput: {s}kbps'.format(s=identified_min_throughput_result)))
+durban_map13.add_child(min_id_circle)
+
+#Represent coordinates for all sites, then find closest one to min DL throughput point
+
+sites_check2 = {}
+
+t2 = 0
+
+while t2 < len(sites_df['ENODEB_NAME']):
+    sites_check[t2] = {'lat': sites_df.loc[t2].at["Latitude"], 'lon': sites_df.loc[t2].at["Longitude"]}
+    t2 = t2+1
+
+site_coordinates_check5 = []
+
+site_coordinates_check5 = [None] * len(sites_df['ENODEB_NAME'])
+
+ao2 = 0
+
+for v in sites_check.values():
+    site_coordinates_check5[ao2] = v
+    ao2+=1
+
+min_dl_throughput_point_to_be_found = {'lat': identified_min_throughput_lat, 'lon': identified_min_throughput_lon}
+nearest_site_coord_checked5 = find_closest_lat_lon(site_coordinates_check5, min_dl_throughput_point_to_be_found)
+
+nearest_site_checked_lat5 = nearest_site_coord_checked5['lat']
+nearest_site_checked_lon5 = nearest_site_coord_checked5['lon']
+
+#Generate line to nearest site point
+
+min_closest_site_line=folium.PolyLine(locations=([identified_min_throughput_lat, identified_min_throughput_lon], [nearest_site_checked_lat5, nearest_site_checked_lon5]), weight=3)
+durban_map13.add_child(min_closest_site_line)
+
+#Use function to find distance to closest site point
+
+distance_to_site_checked5 = calculate_distance(identified_min_throughput_lat, identified_min_throughput_lon, nearest_site_checked_lat5, nearest_site_checked_lon5)
+
+#Add distance marker for the line
+
+min_site_distance_marker = folium.Marker(
+   [identified_min_throughput_lat, identified_min_throughput_lon],
+   icon=DivIcon(
+       icon_size=(20,20),
+       icon_anchor=(0,0),
+       html='<div style="font-size: 12; color:#d35400;"><b>%s</b></div>' % "Closest site is {:10.2f} km away".format(distance_to_site_checked5)
+       )
+   )
+
+durban_map13.add_child(min_site_distance_marker)
+
+#Add title to map
+
+min_map_title = "KZN Min DL Throughput"
+min_title_html = f'<h1 style="position:absolute;z-index:100000;left:30vw" >{min_map_title}</h1>'
+durban_map13.get_root().html.add_child(folium.Element(min_title_html))
+
+durban_map13.save("map13.html")
+
+
 # Create a dash application
 app = dash.Dash(__name__)
 server = app.server
