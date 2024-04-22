@@ -91,6 +91,29 @@ durban_map2.get_root().html.add_child(folium.Element(title_html5))
 
 durban_map2.save("map2.html")
 
+#Generate heatmap of DL Throughput with colour scale
+
+map_osm = folium.Map(location = [durban_latitude, durban_longitude], zoom_start=7, control_scale=True)
+
+steps=20
+colormap = branca.colormap.linear.YlOrRd_09.scale(0, 1).to_step(steps)
+gradient_map=defaultdict(dict)
+for i in range(steps):
+    gradient_map[1/steps*i] = colormap.rgb_hex_str(1/steps*i)
+colormap.add_to(map_osm) #add color bar at the top of the map
+
+df_non_null_loc = df
+df_non_null_loc = df_non_null_loc.dropna(subset=['Latitude', 'Longitude', 'MeanUserDataRateKbps'])
+
+dl_throughput_data = [[row['Latitude'],row['Longitude'], row['MeanUserDataRateKbps']] for index, row in df_non_null_loc.iterrows()]
+HeatMap(dl_throughput_data, gradient = gradient_map).add_to(map_osm) # Add heat map to the previously created map
+
+map_title3 = "KZN DL Throughput Heatmap"
+title_html3 = f'<h1 style="position:absolute;z-index:100000;left:20vw" >{map_title3}</h1>'
+map_osm.get_root().html.add_child(folium.Element(title_html3))
+
+map_osm.save("map5.html")
+
 # Create a dash application
 app = dash.Dash(__name__)
 server = app.server
