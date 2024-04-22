@@ -462,7 +462,7 @@ def get_min_bar_chart(throughput_slider):
 @app.callback(Output(component_id='throughput-violin-plot', component_property='figure'),
               Input(component_id="throughput-slider", component_property="value"))
 def get_box_plot(throughput_slider):
-    filtered_df10 = df[df['MeanUserDataRateKbps']]
+    filtered_df10 = df[(df['MeanUserDataRateKbps']>=throughput_slider[0]) & (df['MeanUserDataRateKbps']<=throughput_slider[1])]
     fig11 = px.violin(filtered_df10, x='Area', y='MeanUserDataRateKbps', color='Area', box=True, points="all", hover_data=filtered_df10.columns,
                       title='Throughput Violin Plot Per Area')
     return fig11
