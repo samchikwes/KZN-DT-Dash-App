@@ -114,6 +114,170 @@ map_osm.get_root().html.add_child(folium.Element(title_html3))
 
 map_osm.save("map5.html")
 
+#Function to calculate distance between two points
+
+def dist_between_two_lat_lon(*args):
+    from math import asin, cos, radians, sin, sqrt
+    lat1, lat2, long1, long2 = map(radians, args)
+
+    dist_lats = abs(lat2 - lat1)
+    dist_longs = abs(long2 - long1)
+    a = sin(dist_lats / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dist_longs / 2) ** 2
+    c = asin(sqrt(a)) * 2
+    radius_earth = 6378  # the "Earth radius" R varies from 6356.752 km at the poles to 6378.137 km at the equator.
+    return c * radius_earth
+
+#Function to get the closest point
+
+def find_closest_lat_lon(data, v):
+    try:
+        return min(data, key=lambda p: dist_between_two_lat_lon(v['lat'], p['lat'], v['lon'], p['lon']))
+    except TypeError:
+        print('Not a list or not a number.')
+
+#Function to get the furthest point
+
+def find_furthest_lat_lon(data, v):
+    try:
+        return max(data, key=lambda p: dist_between_two_lat_lon(v['lat'], p['lat'], v['lon'], p['lon']))
+    except TypeError:
+        print('Not a list or not a number.')
+
+#Function to calculate the distance between points
+
+from math import sin, cos, sqrt, atan2, radians
+
+def calculate_distance(lat1, lon1, lat2, lon2):
+    # approximate radius of earth in km
+    R = 6373.0
+
+    lat1 = radians(lat1)
+    lon1 = radians(lon1)
+    lat2 = radians(lat2)
+    lon2 = radians(lon2)
+
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+
+    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+    distance = R * c
+    return distance
+
+#Code for extracting Max DL Throughput point with its coordinates
+
+max_throughput = df['MeanUserDataRateKbps'].max()
+
+id_max_throughput = ''
+
+for id, rec in enumerate (df['MeanUserDataRateKbps']):
+    if rec == max_throughput:
+        id_max_throughput = id
+
+identified_max_throughput_result = df.loc[id_max_throughput].at["MeanUserDataRateKbps"]
+identified_max_throughput_lat = df.loc[id_max_throughput].at["Latitude"]
+identified_max_throughput_lon = df.loc[id_max_throughput].at["Longitude"]
+
+#Code for extracting Min DL Throughput point with its coordinates
+
+min_throughput = df['MeanUserDataRateKbps'].min()
+
+id_min_throughput = ''
+
+for id, rec in enumerate (df['MeanUserDataRateKbps']):
+    if rec == min_throughput:
+        id_min_throughput = id
+
+identified_min_throughput_result = df.loc[id_min_throughput].at["MeanUserDataRateKbps"]
+identified_min_throughput_lat = df.loc[id_min_throughput].at["Latitude"]
+identified_min_throughput_lon = df.loc[id_min_throughput].at["Longitude"]
+
+#Plot all KZN sites with custom icons on a map, centred on Max DL Throughput point
+
+durban_map12 = folium.Map(location = [identified_max_throughput_lat, identified_max_throughput_lon], zoom_start=16, control_scale=True)
+
+#Plot Marker object with custom icon
+
+icon_path = r"C:\Temp\ZA DT Dashboard\cell_tower.jpg"
+icon = folium.features.CustomIcon(icon_image=icon_path ,icon_size=(50,50))
+
+kzn_sites4 = folium.map.FeatureGroup()
+
+for lat, long, label in zip(sites_df.Latitude, sites_df.Longitude, sites_df.ENODEB_NAME):
+    kzn_sites4.add_child(
+        folium.Marker(
+            [lat, long],
+            popup=label,
+            icon=folium.features.CustomIcon(icon_image=icon_path ,icon_size=(50,50))
+        )
+    )
+
+durban_map12.add_child(kzn_sites4)
+
+#Plot Max DL Throughput point on map
+
+max_point_coordinate = [identified_max_throughput_lat, identified_max_throughput_lon]
+
+max_id_circle = folium.Circle(max_point_coordinate, radius=25, color='#d35400', fill=True).add_child(folium.Popup('Max DL Throughput: {s}kbps'.format(s=identified_max_throughput_result)))
+durban_map12.add_child(max_id_circle)
+
+#Represent coordinates for all sites, then find closest one to max DL throughput point
+
+sites_check = {}
+
+t = 0
+
+while t < len(sites_df['ENODEB_NAME']):
+    sites_check[t] = {'lat': sites_df.loc[t].at["Latitude"], 'lon': sites_df.loc[t].at["Longitude"]}
+    t = t+1
+
+site_coordinates_check4 = []
+
+site_coordinates_check4 = [None] * len(sites_df['ENODEB_NAME'])
+
+ao = 0
+
+for v in sites_check.values():
+    site_coordinates_check4[ao] = v
+    ao+=1
+
+max_dl_throughput_point_to_be_found = {'lat': identified_max_throughput_lat, 'lon': identified_max_throughput_lon}
+nearest_site_coord_checked4 = find_closest_lat_lon(site_coordinates_check4, max_dl_throughput_point_to_be_found)
+
+nearest_site_checked_lat4 = nearest_site_coord_checked4['lat']
+nearest_site_checked_lon4 = nearest_site_coord_checked4['lon']
+
+#Generate line to nearest site point
+
+max_closest_site_line=folium.PolyLine(locations=([identified_max_throughput_lat, identified_max_throughput_lon], [nearest_site_checked_lat4, nearest_site_checked_lon4]), weight=3)
+durban_map12.add_child(max_closest_site_line)
+
+#Use function to find distance to closest site point
+
+distance_to_site_checked4 = calculate_distance(identified_max_throughput_lat, identified_max_throughput_lon, nearest_site_checked_lat4, nearest_site_checked_lon4)
+
+#Add distance marker for the line
+
+max_site_distance_marker = folium.Marker(
+   [identified_max_throughput_lat, identified_max_throughput_lon],
+   icon=DivIcon(
+       icon_size=(20,20),
+       icon_anchor=(0,0),
+       html='<div style="font-size: 12; color:#d35400;"><b>%s</b></div>' % "Closest site is {:10.2f} km away".format(distance_to_site_checked4)
+       )
+   )
+
+durban_map12.add_child(max_site_distance_marker)
+
+#Add title to map
+
+max_map_title = "KZN Max DL Throughput"
+max_title_html = f'<h1 style="position:absolute;z-index:100000;left:30vw" >{max_map_title}</h1>'
+durban_map12.get_root().html.add_child(folium.Element(max_title_html))
+
+durban_map12.save("map12.html")
+
 # Create a dash application
 app = dash.Dash(__name__)
 server = app.server
