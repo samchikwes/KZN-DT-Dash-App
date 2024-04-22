@@ -360,12 +360,12 @@ app.layout = html.Div(children=[html.H1('KZN C2 DL Throughput DT Dashboard',
 				html.Br(),
 
                                 # Add saved Folium map plot of KZN DL Throughput Heatmap
-                                html.P("Map 3 -> Zoom in for better granularity view of areas, with darker shading indicating higher throughput areas", style={"fontSize": 20}),
+                                html.P("Map 2 -> Zoom in for better granularity view of areas, with darker shading indicating higher throughput areas", style={"fontSize": 20}),
                                 html.Iframe(srcDoc = open('map5.html', 'r').read(), style={'width': '1050px', 'height': '510px'}),
 				html.Br(),
 
                                 # Add saved Folium map plot of KZN Max DL Throughput Point
-                                html.P("Map 5 -> Click on max DL throughput point and site icons for further details", style={"fontSize": 20}),
+                                html.P("Map 3 -> Click on max DL throughput point and site icons for further details", style={"fontSize": 20}),
                                 html.Iframe(srcDoc = open('map12.html', 'r').read(), style={'width': '1050px', 'height': '510px'})
                                 ])
 
@@ -438,9 +438,9 @@ def get_mean_bar_chart(throughput_slider):
 
 # Add a callback function for `max-throughput-bar-chart` as output
 @app.callback(Output(component_id='max-throughput-bar-chart', component_property='figure'),
-              Input(component_id="throughput-slider", component_property="value"))
+              Input(component_property="value"))
 def get_max_bar_chart(throughput_slider):
-    filtered_df7 = df[(df['MeanUserDataRateKbps']>=throughput_slider[0]) & (df['MeanUserDataRateKbps']<=throughput_slider[1])]
+    filtered_df7 = df[df['MeanUserDataRateKbps']>=throughput_slider[0] & (df['MeanUserDataRateKbps']<=throughput_slider[1])]
     df_area_throughput3 = filtered_df7[['Area', 'MeanUserDataRateKbps']]
     df_area_throughput4 = df_area_throughput3.groupby(['Area'], as_index=False).max()
     fig8 = px.bar(df_area_throughput4, x='Area', y='MeanUserDataRateKbps', color='Area',
@@ -460,9 +460,9 @@ def get_min_bar_chart(throughput_slider):
 
 # Add a callback function for `throughput-violin-plot` as output
 @app.callback(Output(component_id='throughput-violin-plot', component_property='figure'),
-              Input(component_id="throughput-slider", component_property="value"))
+              Input(component_property="value"))
 def get_box_plot(throughput_slider):
-    filtered_df10 = df[(df['MeanUserDataRateKbps']>=throughput_slider[0]) & (df['MeanUserDataRateKbps']<=throughput_slider[1])]
+    filtered_df10 = df[df['MeanUserDataRateKbps']]
     fig11 = px.violin(filtered_df10, x='Area', y='MeanUserDataRateKbps', color='Area', box=True, points="all", hover_data=filtered_df10.columns,
                       title='Throughput Violin Plot Per Area')
     return fig11
