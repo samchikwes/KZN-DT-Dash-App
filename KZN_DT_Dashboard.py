@@ -199,7 +199,7 @@ durban_map12 = folium.Map(location = [identified_max_throughput_lat, identified_
 
 #Plot Marker object with custom icon
 
-icon_path = r"C:\Temp\ZA DT Dashboard\cell_tower.jpg"
+icon_path = r"cell_tower.jpg"
 icon = folium.features.CustomIcon(icon_image=icon_path ,icon_size=(50,50))
 
 kzn_sites4 = folium.map.FeatureGroup()
