@@ -165,7 +165,11 @@ app.layout = html.Div(children=[html.H1('KZN C2 DL Throughput DT Dashboard',
 
                                 #Add a violin plot for throughput per area
                                 html.Div(dcc.Graph(id='throughput-violin-plot')),
-                                html.Br()
+                                html.Br(),
+
+				#Add saved Folium map plot of KZN DL Failure Test Points
+				html.P("Map 1 -> Zoom in and click points to view their logfile name details", style={"fontSize": 20}),
+				html.Iframe(srcDoc = open('map2.html', 'r').read(), style={'width': '1050px', 'height': '510px'})
                                 ])
 
 # TASK 2:
@@ -265,10 +269,6 @@ def get_box_plot(throughput_slider):
     fig11 = px.violin(filtered_df10, x='Area', y='MeanUserDataRateKbps', color='Area', box=True, points="all", hover_data=filtered_df10.columns,
                       title='Throughput Violin Plot Per Area')
     return fig11
-
-#Add saved Folium map plot of KZN DL Failure Test Points
-html.P("Map 1 -> Zoom in and click points to view their logfile name details", style={"fontSize": 20}),
-html.Iframe(srcDoc = open('map2.html', 'r').read(), style={'width': '1050px', 'height': '510px'})
 
 # Run the app
 if __name__ == '__main__':
