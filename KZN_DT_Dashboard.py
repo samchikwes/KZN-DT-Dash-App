@@ -309,7 +309,7 @@ app.layout = html.Div(children=[html.H1('KZN C2 DL Throughput DT Dashboard',
                                 html.Div(dcc.Graph(id='success-pie-chart')),
                                 html.Br(),
 
-                                html.P("Throughput range (kbps):"),
+                                html.P("DL Throughput range (kbps):"),
                                 # TASK 3: Add a slider to select throughput
                                 #dcc.RangeSlider(id='throughput-slider',...)
                                 #html.Div(dcc.RangeSlider(id='throughput-slider',
@@ -399,13 +399,13 @@ def get_scatter_chart(entered_area, throughput_slider):
     filtered_df2 = df[(df['MeanUserDataRateKbps']>=throughput_slider[0]) & (df['MeanUserDataRateKbps']<=throughput_slider[1])]
     if entered_area == 'ALL':
         fig3 = px.scatter(filtered_df2, x = 'MeanUserDataRateKbps', y = 'Class', color='EndDataRadioBearer',
-        title=f'Correlation Dataset: Throughput for different RATS in successful cases for All Areas')
+        title=f'Correlation Dataset: DL Throughput for different RATS in successful cases for All Areas')
         return fig3
     else:
         # return the outcomes scatter chart for a selected area and throughput
         filtered_df3=filtered_df2[filtered_df2['Area']== entered_area]
         fig4 = px.scatter(filtered_df3, x = 'MeanUserDataRateKbps', y = 'Class', color='EndDataRadioBearer',
-        title=f'Correlation Dataset: Throughput for different RATS in successful cases for {entered_area}')
+        title=f'Correlation Dataset: DL Throughput for different RATS in successful cases for {entered_area}')
         return fig4
 
 # Add a callback function for `area-dropdown` and `throughput-slider` as inputs, `throughput-sinr-scatter-chart` as output
@@ -416,13 +416,13 @@ def get_throughput_sinr_scatter_chart(entered_area, throughput_slider):
     filtered_df4 = df[(df['MeanUserDataRateKbps']>=throughput_slider[0]) & (df['MeanUserDataRateKbps']<=throughput_slider[1])]
     if entered_area == 'ALL':
         fig5 = px.scatter(filtered_df4, x = 'SINR', y = 'MeanUserDataRateKbps',
-        title='Correlation Dataset: Throughput vs SINR for All Areas')
+        title='Correlation Dataset: DL Throughput vs SINR for All Areas')
         return fig5
     else:
         # return the scatter chart for a selected area and throughput range
         filtered_df5=filtered_df4[filtered_df4['Area']== entered_area]
         fig6 = px.scatter(filtered_df5, x = 'SINR', y = 'MeanUserDataRateKbps',
-        title=f'Correlation Dataset: Throughput vs SINR for {entered_area}')
+        title=f'Correlation Dataset: DL Throughput vs SINR for {entered_area}')
         return fig6
 
 # Add a callback function for `mean-throughput-bar-chart` as output
@@ -464,7 +464,7 @@ def get_min_bar_chart(throughput_slider):
 def get_box_plot(throughput_slider):
     filtered_df10 = df[(df['MeanUserDataRateKbps']>=throughput_slider[0]) & (df['MeanUserDataRateKbps']<=throughput_slider[1])]
     fig11 = px.box(filtered_df10, x='EndDataRadioBearer', y='MeanUserDataRateKbps', color='EndDataRadioBearer',
-                      title='Throughput Boxplot Per Area')
+                      title='DL Throughput Boxplot Per Area')
     return fig11
 
 # Run the app
