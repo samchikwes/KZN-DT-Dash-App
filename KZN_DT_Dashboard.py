@@ -442,7 +442,7 @@ def get_min_bar_chart(throughput_slider):
 def get_box_plot(throughput_slider):
     filtered_df10 = df[(df['MeanUserDataRateKbps']>=throughput_slider[0]) & (df['MeanUserDataRateKbps']<=throughput_slider[1])]
     fig11 = px.box(filtered_df10, x='EndDataRadioBearer', y='MeanUserDataRateKbps', color='EndDataRadioBearer',
-#                      title='Throughput Boxplot Per Area')
+                      title='Throughput Boxplot Per Area')
     return fig11
 
 # Run the app
