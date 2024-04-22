@@ -390,6 +390,24 @@ def get_pie_chart(entered_area):
         title=f'DL Testing Status for {entered_area}')
         return fig2
 
+# TASK 4:
+# Add a callback function for `area-dropdown` and `throughput-slider` as inputs, `success-throughput-scatter-chart` as output
+@app.callback(Output(component_id='success-throughput-scatter-chart', component_property='figure'),
+              Input(component_id='area-dropdown', component_property='value'),
+              Input(component_id="throughput-slider", component_property="value"))
+def get_scatter_chart(entered_area, throughput_slider):
+    filtered_df2 = df[(df['MeanUserDataRateKbps']>=throughput_slider[0]) & (df['MeanUserDataRateKbps']<=throughput_slider[1])]
+    if entered_area == 'ALL':
+        fig3 = px.scatter(filtered_df2, x = 'MeanUserDataRateKbps', y = 'Class', color='EndDataRadioBearer',
+        title=f'Correlation Dataset: Throughput for different RATS in successful cases for All Areas')
+        return fig3
+    else:
+        # return the outcomes scatter chart for a selected area and throughput
+        filtered_df3=filtered_df2[filtered_df2['Area']== entered_area]
+        fig4 = px.scatter(filtered_df3, x = 'MeanUserDataRateKbps', y = 'Class', color='EndDataRadioBearer',
+        title=f'Correlation Dataset: Throughput for different RATS in successful cases for {entered_area}')
+        return fig4
+
 # Add a callback function for `area-dropdown` and `throughput-slider` as inputs, `throughput-sinr-scatter-chart` as output
 @app.callback(Output(component_id='throughput-sinr-scatter-chart', component_property='figure'),
               Input(component_id='area-dropdown', component_property='value'),
