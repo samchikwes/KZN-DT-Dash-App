@@ -438,7 +438,7 @@ def get_mean_bar_chart(throughput_slider):
 
 # Add a callback function for `max-throughput-bar-chart` as output
 @app.callback(Output(component_id='max-throughput-bar-chart', component_property='figure'),
-              Input(component_property="value"))
+              Input(component_id="throughput-slider", component_property="value"))
 def get_max_bar_chart(throughput_slider):
     filtered_df7 = df[df['MeanUserDataRateKbps']>=throughput_slider[0] & (df['MeanUserDataRateKbps']<=throughput_slider[1])]
     df_area_throughput3 = filtered_df7[['Area', 'MeanUserDataRateKbps']]
