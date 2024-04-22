@@ -347,7 +347,7 @@ app.layout = html.Div(children=[html.H1('KZN C2 DL Throughput DT Dashboard',
                                 html.Br(),
 
                                 #Add a violin plot for throughput per area
-                                html.Div(dcc.Graph(id='throughput-violin-plot')),
+                                html.Div(dcc.Graph(id='throughput-box-plot')),
                                 html.Br(),
 
 				#Add saved Folium map plot of KZN DL Failure Test Points
@@ -436,13 +436,13 @@ def get_min_bar_chart(throughput_slider):
                       title='KZN Min DL Throughput Per Area')
     return fig9
 
-# Add a callback function for `throughput-violin-plot` as output
-@app.callback(Output(component_id='throughput-violin-plot', component_property='figure'),
+# Add a callback function for `throughput-box-plot` as output
+@app.callback(Output(component_id='throughput-box-plot', component_property='figure'),
               Input(component_id="throughput-slider", component_property="value"))
 def get_box_plot(throughput_slider):
     filtered_df10 = df[(df['MeanUserDataRateKbps']>=throughput_slider[0]) & (df['MeanUserDataRateKbps']<=throughput_slider[1])]
-    fig11 = px.violin(filtered_df10, x='EndDataRadioBearer', y='MeanUserDataRateKbps', color='Area', box=True, points="all", hover_data=filtered_df10.columns,
-                      title='Throughput Violin Plot Per Area')
+    fig11 = px.box(filtered_df10, x='EndDataRadioBearer', y='MeanUserDataRateKbps', color='EndDataRadioBearer',
+#                      title='Throughput Boxplot Per Area')
     return fig11
 
 # Run the app
