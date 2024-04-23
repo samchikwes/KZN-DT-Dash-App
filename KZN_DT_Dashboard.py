@@ -114,6 +114,102 @@ map_osm.get_root().html.add_child(folium.Element(title_html3))
 
 map_osm.save("map5.html")
 
+#Plot RAT for all test points
+
+def get_RAT_color(rt):
+    marker = ''
+    if rt == 'EGPRS':
+        marker = 'red'
+    elif rt == 'HSDPA':
+        marker = 'orange'
+    elif rt == 'HSPA':
+        marker = 'yellow'
+    elif rt == 'LTE':
+        marker = 'green'
+    elif rt == 'Mixed':
+        marker = 'blue'
+    elif rt == 'Mixed HSPA':
+        marker = 'indigo'
+    elif rt == 'Mixed (LTE-NR)':
+        marker = 'violet'
+    elif rt == 'R99':
+        marker = 'grey'
+    return marker
+
+dl_RAT_df = df[['Latitude', 'Longitude', 'LogName', 'EndDataRadioBearer']]
+dl_RAT_df = dl_RAT_df.dropna(subset=['Latitude', 'Longitude', 'LogName', 'EndDataRadioBearer'])
+
+dl_RAT_df['Marker_Colour'] = dl_RAT_df['EndDataRadioBearer'].apply(get_RAT_color)
+
+durban_map6 = folium.Map(location = [durban_latitude, durban_longitude], zoom_start=7, control_scale=True)
+
+dl_RAT_points = folium.map.FeatureGroup()
+
+for lat, long, colour, label in zip(dl_RAT_df.Latitude, dl_RAT_df.Longitude, dl_RAT_df.Marker_Colour, dl_RAT_df.LogName):
+    dl_RAT_points.add_child(
+        folium.features.CircleMarker(
+            [lat, long],
+            radius=3,
+            color=colour,
+            fill=True,
+            fill_color=colour,
+            fill_opacity=0.6,
+            popup=label
+        )
+    )
+
+durban_map6.add_child(dl_RAT_points)
+
+item_txt = """<br> &nbsp; {item} &nbsp; <i class="fa fa-map-marker fa-1x" style="color:{col}"></i>"""
+item_txt2 = """<br> &nbsp; {item2} &nbsp; <i class="fa fa-map-marker fa-1x" style="color:{col2}"></i>"""
+item_txt3 = """<br> &nbsp; {item3} &nbsp; <i class="fa fa-map-marker fa-1x" style="color:{col3}"></i>"""
+item_txt4 = """<br> &nbsp; {item4} &nbsp; <i class="fa fa-map-marker fa-1x" style="color:{col4}"></i>"""
+item_txt5 = """<br> &nbsp; {item5} &nbsp; <i class="fa fa-map-marker fa-1x" style="color:{col5}"></i>"""
+item_txt6 = """<br> &nbsp; {item6} &nbsp; <i class="fa fa-map-marker fa-1x" style="color:{col6}"></i>"""
+item_txt7 = """<br> &nbsp; {item7} &nbsp; <i class="fa fa-map-marker fa-1x" style="color:{col7}"></i>"""
+item_txt8 = """<br> &nbsp; {item8} &nbsp; <i class="fa fa-map-marker fa-1x" style="color:{col8}"></i>"""
+html_itms = item_txt.format(item="EGPRS", col="red")
+html_itms2 = item_txt2.format(item2="HSDPA", col2="orange")
+html_itms3 = item_txt3.format(item3="HSPA", col3="yellow")
+html_itms4 = item_txt4.format(item4="LTE", col4="green")
+html_itms5 = item_txt5.format(item5="Mixed", col5="blue")
+html_itms6 = item_txt6.format(item6="Mixed HSPA", col6="indigo")
+html_itms7 = item_txt7.format(item7="Mixed (LTE-NR)", col7="violet")
+html_itms8 = item_txt8.format(item8="R99", col8="grey")
+
+legend_html = """
+     <div style="
+     position: fixed; 
+     bottom: 30px; left: 50px; width: 200px; height: 180px; 
+     border:2px solid grey; z-index:9999; 
+
+     background-color:white;
+     opacity: .85;
+
+     font-size:14px;
+     font-weight: bold;
+
+     ">
+     &nbsp; {title} 
+
+     {itm_txt}
+     {itm_txt2}
+     {itm_txt3}
+     {itm_txt4}
+     {itm_txt5}
+     {itm_txt6}
+     {itm_txt7}
+     {itm_txt8}
+
+      </div> """.format(title="Legend", itm_txt=html_itms, itm_txt2=html_itms2, itm_txt3=html_itms3, itm_txt4=html_itms4, itm_txt5=html_itms5, itm_txt6=html_itms6, itm_txt7=html_itms7, itm_txt8=html_itms8)
+durban_map6.get_root().html.add_child(folium.Element(legend_html))
+
+map_title2 = "KZN DL Testing Radio Access Technologies"
+title_html2 = f'<h1 style="position:absolute;z-index:100000;left:20vw" >{map_title2}</h1>'
+durban_map6.get_root().html.add_child(folium.Element(title_html2))
+
+durban_map6.save("map6.html")
+
 #Function to calculate distance between two points
 
 def dist_between_two_lat_lon(*args):
