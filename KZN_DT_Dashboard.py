@@ -309,16 +309,16 @@ app.layout = html.Div(children=[html.H1('KZN C2 DL Testing DT Dashboard',
                                 html.Div(dcc.Graph(id='success-pie-chart')),
                                 html.Br(),
 
-                                html.P("DL Throughput range (kbps):"),
+                                html.P("DL Throughput Range (kbps):"),
                                 # TASK 3: Add a slider to select throughput
                                 #dcc.RangeSlider(id='throughput-slider',...)
                                 #html.Div(dcc.RangeSlider(id='throughput-slider',
                                 dcc.RangeSlider(id='throughput-slider',
 	                                min=0, max=550000, step=50000,
 	                                marks={0: '0',
-		                                50000: '50000',
-		                                100000: '100000',
-		                                150000: '150000',
+		                        50000: '50000',
+		                        100000: '100000',
+		                        150000: '150000',
                                         200000: '200000',
                                         250000: '250000',
                                         300000: '300000',
@@ -463,8 +463,8 @@ def get_min_bar_chart(throughput_slider):
               Input(component_id="throughput-slider", component_property="value"))
 def get_box_plot(throughput_slider):
     filtered_df10 = df[(df['MeanUserDataRateKbps']>=throughput_slider[0]) & (df['MeanUserDataRateKbps']<=throughput_slider[1])]
-    fig11 = px.box(filtered_df10, x='Area', y='MeanUserDataRateKbps', color='Area',
-                      title='KZN DL Throughput Boxplot Per Area')
+    fig11 = px.box(filtered_df10, x='EndDataRadioBearer', y='MeanUserDataRateKbps', color='EndDataRadioBearer',
+                      title='KZN DL Throughput Boxplot Per Tech')
     return fig11
 
 # Run the app
