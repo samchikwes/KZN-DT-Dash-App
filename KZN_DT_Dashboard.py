@@ -430,6 +430,10 @@ app.layout = html.Div(children=[html.H1('KZN C2 DL Testing DT Dashboard',
                                 html.Div(dcc.Graph(id='min-throughput-bar-chart')),
                                 html.Br(),
 
+                                #Add a box plot for throughput per area
+                                html.Div(dcc.Graph(id='throughput-box-plot')),
+                                html.Br(),
+
                                 #Add saved Folium map plot of KZN DL Failure Test Points
 				html.P("Map 1 -> Zoom in and click points to view their logfile name details", style={"fontSize": 20}),
 				html.Iframe(srcDoc = open('map2.html', 'r').read(), style={'width': '1050px', 'height': '510px'}),
