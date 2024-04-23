@@ -355,7 +355,7 @@ app.layout = html.Div(children=[html.H1('KZN C2 DL Testing DT Dashboard',
                                 html.Br(),
 
                                 #Add saved Folium map plot of KZN DL Failure Test Points
-				html.P("Map 1 -> Zoom in and click points to view their logfile name details", style={"fontSize": 20}),
+				html.P("Map 1 -> Zoom in and click test points to view their logfile name details", style={"fontSize": 20}),
 				html.Iframe(srcDoc = open('map2.html', 'r').read(), style={'width': '1050px', 'height': '510px'}),
 				html.Br(),
 
@@ -365,7 +365,7 @@ app.layout = html.Div(children=[html.H1('KZN C2 DL Testing DT Dashboard',
 				html.Br(),
 
 				# Add saved Folium map plot of KZN Max DL Throughput Point
-                                html.P("Map 3 -> Click on max DL throughput point and site icons for further details", style={"fontSize": 20}),
+                                html.P("Map 3 -> Click on max DL throughput test point and site icons for further details", style={"fontSize": 20}),
                                 html.Iframe(srcDoc = open('map12.html', 'r').read(), style={'width': '1050px', 'height': '510px'})
                                 ])
 
@@ -464,7 +464,7 @@ def get_min_bar_chart(throughput_slider):
 def get_box_plot(throughput_slider):
     filtered_df10 = df[(df['MeanUserDataRateKbps']>=throughput_slider[0]) & (df['MeanUserDataRateKbps']<=throughput_slider[1])]
     fig11 = px.box(filtered_df10, x='Area', y='MeanUserDataRateKbps', color='Area',
-                      title='KZN Throughput Boxplot Per Area')
+                      title='KZN DL Throughput Boxplot Per Area')
     return fig11
 
 # Run the app
