@@ -540,6 +540,12 @@ app.layout = html.Div(children=[html.H1('KZN C2 DL Testing DT Dashboard',
                                 html.Iframe(srcDoc = open('map5.html', 'r').read(), style={'width': '1050px', 'height': '510px'}),
 				html.Br(),
 
+				# Add saved Folium map plot of KZN DL Radio Access Technologies
+                                html.P("Map 4 -> Points indicate serving technology of the sample - zoom in and use legend to determine the tech", style={"fontSize": 20}),
+                                html.Iframe(srcDoc=open('map6.html', 'r').read(),
+                                            style={'width': '1050px', 'height': '510px'}),
+                                html.Br(),
+
                                 # Add saved Folium map plot of KZN Max DL Throughput Point
                                 html.P("Map 3 -> Click on max DL throughput point and site icons for further details", style={"fontSize": 20}),
                                 html.Iframe(srcDoc = open('map12.html', 'r').read(), style={'width': '1050px', 'height': '510px'}),
