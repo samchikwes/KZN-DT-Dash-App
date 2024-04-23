@@ -272,7 +272,7 @@ durban_map12.add_child(max_site_distance_marker)
 
 #Add title to map
 
-max_map_title = "KZN Max DL Throughput"
+max_map_title = "KZN Max DL Throughput Point"
 max_title_html = f'<h1 style="position:absolute;z-index:100000;left:30vw" >{max_map_title}</h1>'
 durban_map12.get_root().html.add_child(folium.Element(max_title_html))
 
@@ -362,7 +362,14 @@ app.layout = html.Div(children=[html.H1('KZN C2 DL Testing DT Dashboard',
 
                                 # Add saved Folium map plot of KZN Max DL Throughput Point
                                 html.P("Map 3 -> Click on max DL throughput point and site icons for further details", style={"fontSize": 20}),
-                                html.Iframe(srcDoc = open('map12.html', 'r').read(), style={'width': '1050px', 'height': '510px'})
+                                html.Iframe(srcDoc = open('map12.html', 'r').read(), style={'width': '1050px', 'height': '510px'}),
+				html.Br(),
+
+                                # Add saved Folium map plot of KZN Min DL Throughput Point
+                                html.P("Map 6 -> Click on min DL throughput point and site icons for further details", style={"fontSize": 20}),
+                                html.Iframe(srcDoc=open('map13.html', 'r').read(),
+                                            style={'width': '1050px', 'height': '510px'})
+                                
                                 ])
 
 # TASK 2:
