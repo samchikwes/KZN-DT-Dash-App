@@ -362,12 +362,12 @@ app.layout = html.Div(children=[html.H1('KZN C3 DL Testing DT Dashboard',
                                 html.Br(),
 
 				# Add saved Folium map plot of KZN Max DL Throughput Point
-                                html.P("Map 2 -> Click on max DL throughput test point and site icons for further details", style={"fontSize": 20}),
+                                html.P("Map 1 -> Click on max DL throughput test point and site icons for further details", style={"fontSize": 20}),
                                 html.Iframe(srcDoc = open('map12.html', 'r').read(), style={'width': '1050px', 'height': '510px'}),
                                 html.Br(),
 
                                 # Add saved Folium map plot of KZN Min DL Throughput Point
-                                html.P("Map 3 -> Click on min DL throughput point and site icons for further details", style={"fontSize": 20}),
+                                html.P("Map 2 -> Click on min DL throughput point and site icons for further details", style={"fontSize": 20}),
                                 html.Iframe(srcDoc=open('map13.html', 'r').read(), style={'width': '1050px', 'height': '510px'})
                                 ])
 
