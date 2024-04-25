@@ -54,56 +54,6 @@ dl_data_fail_df = df[df['ServiceStatus']=='Failed']
 
 dl_data_success_df = df[df['ServiceStatus']!='Failed']
 
-#Durban map coordinates info (for center point of plotted maps)
-
-durban_latitude = -29.883333
-durban_longitude = 31.049999
-
-#Plot map markers indicating DL test status (failed or non-failed)
-
-durban_map3 = folium.Map(location = [durban_latitude, durban_longitude], zoom_start=7, control_scale=True)
-
-marker_cluster = MarkerCluster()
-
-durban_map3.add_child(marker_cluster)
-
-for index, record in df.iterrows():
-    marker = folium.Marker(
-        [record['Latitude'], record['Longitude']], popup = record['LogName'],
-        icon = folium.Icon(
-            color = 'white', icon_color = record['Marker_Color'])
-    )
-    marker_cluster.add_child(marker)
-
-map_title4 = "KZN DL Testing Status Markers"
-title_html4 = f'<h1 style="position:absolute;z-index:100000;left:30vw" >{map_title4}</h1>'
-durban_map3.get_root().html.add_child(folium.Element(title_html4))
-
-durban_map3.save("map3.html")
-
-#Generate heatmap of DL Throughput with colour scale
-
-map_osm = folium.Map(location = [durban_latitude, durban_longitude], zoom_start=7, control_scale=True)
-
-steps=20
-colormap = branca.colormap.linear.YlOrRd_09.scale(0, 1).to_step(steps)
-gradient_map=defaultdict(dict)
-for i in range(steps):
-    gradient_map[1/steps*i] = colormap.rgb_hex_str(1/steps*i)
-colormap.add_to(map_osm) #add color bar at the top of the map
-
-df_non_null_loc = df
-df_non_null_loc = df_non_null_loc.dropna(subset=['Latitude', 'Longitude', 'MeanUserDataRateKbps'])
-
-dl_throughput_data = [[row['Latitude'],row['Longitude'], row['MeanUserDataRateKbps']] for index, row in df_non_null_loc.iterrows()]
-HeatMap(dl_throughput_data, gradient = gradient_map).add_to(map_osm) # Add heat map to the previously created map
-
-map_title3 = "KZN DL Throughput Heatmap"
-title_html3 = f'<h1 style="position:absolute;z-index:100000;left:20vw" >{map_title3}</h1>'
-map_osm.get_root().html.add_child(folium.Element(title_html3))
-
-map_osm.save("map5.html")
-
 #Function to calculate distance between two points
 
 def dist_between_two_lat_lon(*args):
@@ -374,9 +324,33 @@ app.layout = html.Div(children=[html.H1('KZN C3 DL Testing DT Dashboard',
                                     ),
                                 html.Br(),
 
-                                # TASK 2: Add a pie chart to show the total successful tests for all regions
-                                # If a specific region was selected, show the Success vs. Failed proportions for the region
-                                html.Div(dcc.Graph(id='success-pie-chart')),
+				html.P("DL Throughput Range (kbps):"),
+                                # TASK 3: Add a slider to select throughput
+                                #dcc.RangeSlider(id='throughput-slider',...)
+                                #html.Div(dcc.RangeSlider(id='throughput-slider',
+                                dcc.RangeSlider(id='throughput-slider',
+	                                min=0, max=750000, step=50000,
+	                                marks={0: '0',
+		                        50000: '50000',
+		                        100000: '100000',
+		                        150000: '150000',
+                                        200000: '200000',
+                                        250000: '250000',
+                                        300000: '300000',
+                                        350000: '350000',
+                                        400000: '400000',
+                                        450000: '450000',
+                                        500000: '500000',
+                                        550000: '550000',
+                                        600000: '600000',
+                                        650000: '650000',
+                                        700000: '700000',
+                                        750000: '750000'},
+                                    value=[min_throughput, max_throughput]
+                                ),
+
+                                # TASK 4: Add a scatter chart to show the correlation between throughput and RAT for successful test cases
+                                html.Div(dcc.Graph(id='success-throughput-scatter-chart')),
                                 html.Br(),
 
                                 #Add a box plot for throughput per area
@@ -387,44 +361,33 @@ app.layout = html.Div(children=[html.H1('KZN C3 DL Testing DT Dashboard',
                                 html.Div(dcc.Graph(id='throughput-box-plot-2')),
                                 html.Br(),
 
-                                # Add saved Folium map plot of KZN DL Testing Status Markers
-                                html.P("Map 1 -> Click marker clusters to focus on specific areas - green markers are successful samples and red markers are failure samples", style={"fontSize": 20}),
-                                html.Iframe(srcDoc=open('map3.html', 'r').read(),
-                                            style={'width': '1050px', 'height': '510px'}),
-                                html.Br(),
-
-				                # Add saved Folium map plot of KZN Max DL Throughput Point
+				# Add saved Folium map plot of KZN Max DL Throughput Point
                                 html.P("Map 2 -> Click on max DL throughput test point and site icons for further details", style={"fontSize": 20}),
                                 html.Iframe(srcDoc = open('map12.html', 'r').read(), style={'width': '1050px', 'height': '510px'}),
                                 html.Br(),
 
                                 # Add saved Folium map plot of KZN Min DL Throughput Point
-                                html.P("Map 3 -> Click on min DL throughput point and site icons for further details",
-                                       style={"fontSize": 20}),
-                                html.Iframe(srcDoc=open('map13.html', 'r').read(),
-                                            style={'width': '1050px', 'height': '510px'})
+                                html.P("Map 3 -> Click on min DL throughput point and site icons for further details", style={"fontSize": 20}),
+                                html.Iframe(srcDoc=open('map13.html', 'r').read(), style={'width': '1050px', 'height': '510px'})
                                 ])
 
-# TASK 2:
-# Add a callback function for `area-dropdown` as input, `success-pie-chart` as output
-# Function decorator to specify function input and output
-@app.callback(Output(component_id='success-pie-chart', component_property='figure'),
-              Input(component_id='area-dropdown', component_property='value'))
-def get_pie_chart(entered_area):
-    filtered_df = df
+# TASK 4:
+# Add a callback function for `area-dropdown` and `throughput-slider` as inputs, `success-throughput-scatter-chart` as output
+@app.callback(Output(component_id='success-throughput-scatter-chart', component_property='figure'),
+              Input(component_id='area-dropdown', component_property='value'),
+              Input(component_id="throughput-slider", component_property="value"))
+def get_scatter_chart(entered_area, throughput_slider):
+    filtered_df2 = df[(df['MeanUserDataRateKbps']>=throughput_slider[0]) & (df['MeanUserDataRateKbps']<=throughput_slider[1])]
     if entered_area == 'ALL':
-        fig = px.pie(filtered_df, values='Class',
-        names='Area',
-        title='Proportion of KZN DL Test Samples Per Area')
-        return fig
+        fig3 = px.scatter(filtered_df2, x = 'MeanUserDataRateKbps', y = 'Class', color='EndDataRadioBearer',
+        title=f'Correlation Dataset: KZN DL Throughput for Different Techs in Successful Test Cases for All Areas')
+        return fig3
     else:
-        # return the outcomes piechart for a selected region
-        filtered_df=df[df['Area']== entered_area]
-        filtered_df = filtered_df.groupby(['Area', 'Class']).size().reset_index(name='class count')
-        fig2 = px.pie(filtered_df, values='class count',
-        names='Class',
-        title=f'DL Testing Status for {entered_area}')
-        return fig2
+        # return the outcomes scatter chart for a selected area and throughput
+        filtered_df3=filtered_df2[filtered_df2['Area']== entered_area]
+        fig4 = px.scatter(filtered_df3, x = 'MeanUserDataRateKbps', y = 'Class', color='EndDataRadioBearer',
+        title=f'Correlation Dataset: DL Throughput for Different Techs in Successful Cases for {entered_area}')
+        return fig4
 
 # Add a callback function for `throughput-box-plot` as output
 @app.callback(Output(component_id='throughput-box-plot', component_property='figure'),
