@@ -379,36 +379,6 @@ app.layout = html.Div(children=[html.H1('KZN C3 DL Testing DT Dashboard',
                                 html.Div(dcc.Graph(id='success-pie-chart')),
                                 html.Br(),
 
-                                html.P("DL Throughput Range (kbps):"),
-                                # TASK 3: Add a slider to select throughput
-                                #dcc.RangeSlider(id='throughput-slider',...)
-                                #html.Div(dcc.RangeSlider(id='throughput-slider',
-                                dcc.RangeSlider(id='throughput-slider',
-	                                min=0, max=750000, step=50000,
-	                                marks={0: '0',
-		                                50000: '50000',
-		                                100000: '100000',
-		                                150000: '150000',
-                                        200000: '200000',
-                                        250000: '250000',
-                                        300000: '300000',
-                                        350000: '350000',
-                                        400000: '400000',
-                                        450000: '450000',
-                                        500000: '500000',
-                                        550000: '550000',
-                                        600000: '600000',
-                                        650000: '650000',
-                                        700000: '700000',
-                                        750000: '750000'},
-                                    value=[min_throughput, max_throughput]
-#                                    value=[min_throughput, max_throughput]
-                                ),
-
-                                # TASK 4: Add a scatter chart to show the correlation between throughput and RAT for successful test cases
-                                html.Div(dcc.Graph(id='success-throughput-scatter-chart')),
-                                html.Br(),
-
                                 #Add a box plot for throughput per area
                                 html.Div(dcc.Graph(id='throughput-box-plot')),
                                 html.Br(),
@@ -455,24 +425,6 @@ def get_pie_chart(entered_area):
         names='Class',
         title=f'DL Testing Status for {entered_area}')
         return fig2
-
-# TASK 4:
-# Add a callback function for `area-dropdown` and `throughput-slider` as inputs, `success-throughput-scatter-chart` as output
-@app.callback(Output(component_id='success-throughput-scatter-chart', component_property='figure'),
-              Input(component_id='area-dropdown', component_property='value'),
-              Input(component_id="throughput-slider", component_property="value"))
-def get_scatter_chart(entered_area, throughput_slider):
-    filtered_df2 = df[(df['MeanUserDataRateKbps']>=throughput_slider[0]) & (df['MeanUserDataRateKbps']<=throughput_slider[1])]
-    if entered_area == 'ALL':
-        fig3 = px.scatter(filtered_df2, x = 'MeanUserDataRateKbps', y = 'Class', color='EndDataRadioBearer',
-        title=f'Correlation Dataset: KZN DL Throughput for Different Techs in Successful Test Cases for All Areas')
-        return fig3
-    else:
-        # return the outcomes scatter chart for a selected area and throughput
-        filtered_df3=filtered_df2[filtered_df2['Area']== entered_area]
-        fig4 = px.scatter(filtered_df3, x = 'MeanUserDataRateKbps', y = 'Class', color='EndDataRadioBearer',
-        title=f'Correlation Dataset: DL Throughput for Different Techs in Successful Cases for {entered_area}')
-        return fig4
 
 # Add a callback function for `throughput-box-plot` as output
 @app.callback(Output(component_id='throughput-box-plot', component_property='figure'),
