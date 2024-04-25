@@ -19,7 +19,7 @@ import base64
 from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 
-df = pd.read_excel(r'C:\Temp\ZA DT Dashboard\KZN C3 Custom Streaming CDR.xlsx')
+df = pd.read_excel(r'KZN C3 Custom Streaming CDR.xlsx')
 
 #Replace commas in coordinate values with dots
 df["Latitude"] = df["Latitude"].str.replace(',', '.')
