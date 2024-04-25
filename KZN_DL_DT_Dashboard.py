@@ -19,9 +19,9 @@ import base64
 from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 
-df = pd.read_excel(r'C:\Temp\ZA DT Dashboard\KZN C3 Custom Data CDR.xlsx')
+df = pd.read_excel(r'KZN C3 Custom Data CDR.xlsx')
 
-sites_df = pd.read_csv(r'C:\Users\chikwesa\OneDrive - Vodafone Group\PC Backup 9 February 2021\Group Network Quality\Analytics\Programs\Python\KZN Sites 22_11_2021.csv')
+sites_df = pd.read_csv(r'KZN Sites 22_11_2021.csv')
 
 #Function to classify failures and non-failures as class 0 or 1
 
@@ -189,7 +189,7 @@ durban_map12 = folium.Map(location = [identified_max_throughput_lat, identified_
 
 #Plot Marker object with custom icon
 
-icon_path = r"C:\Temp\ZA DT Dashboard\cell_tower.jpg"
+icon_path = r"cell_tower.jpg"
 icon = folium.features.CustomIcon(icon_image=icon_path ,icon_size=(50,50))
 
 kzn_sites4 = folium.map.FeatureGroup()
